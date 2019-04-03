@@ -1,5 +1,6 @@
 package com.cihatcni.info15011041;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,7 +10,8 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DersActivity extends AppCompatActivity implements RecyclerViewClickListener {
+public class DersActivity extends AppCompatActivity {
+
     private RecyclerView.LayoutManager layaoutManager;
     private List<Ders> dersler;
 
@@ -38,13 +40,21 @@ public class DersActivity extends AppCompatActivity implements RecyclerViewClick
         recyclerView.setLayoutManager(layaoutManager);
 
         MyAdapter myAdapter = new MyAdapter(dersler);
+        myAdapter.setOnItemClickListener(new RecyclerViewClickListener() {
+            @Override
+            public void userItemClick(View v, int position) {
+                Intent intent = new Intent(getApplicationContext(),DersBilgiActivity.class);
+                intent.putExtra("lessonName",dersler.get(position).getDersAdı());
+                intent.putExtra("stuCount",dersler.get(position).getOgrenciSayisi());
+                intent.putExtra("lessonGrade",dersler.get(position).getDersNotu());
+                startActivity(intent);
+            }
+        });
+
+
         recyclerView.setAdapter(myAdapter);
 
     }
 
 
-    @Override
-    public void recyclerViewListClicked(View v, int position) {
-
-    }
 }

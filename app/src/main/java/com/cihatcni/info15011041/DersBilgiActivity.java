@@ -18,7 +18,7 @@ public class DersBilgiActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         lessonName.setText(intent.getStringExtra("lessonName"));
-        lessonStuCount.setText(intent.getStringExtra("stuCount"));
+        lessonStuCount.setText(""+intent.getIntExtra("stuCount",0));
         lessonGrade.setText(intent.getStringExtra("lessonGrade"));
     }
 }
