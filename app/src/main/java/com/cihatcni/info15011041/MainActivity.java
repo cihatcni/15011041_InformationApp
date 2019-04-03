@@ -18,6 +18,8 @@ import android.view.View;
 import android.content.Intent;
 import android.widget.EditText;
 import android.widget.ImageView;
+
+import java.io.ByteArrayOutputStream;
 import java.util.Calendar;
 import android.widget.DatePicker;
 import android.widget.Toast;
@@ -192,12 +194,13 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("telNumber",telNumber.getText().toString());
         intent.putExtra("personAge",personAge);
 
+        //Resim aktarma
         picture.setDrawingCacheEnabled(true);
         picture.buildDrawingCache();
         Bitmap image= picture.getDrawingCache();
-        myImage = image;
-        //intent.putExtra("profilePicture",image);
-
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
+        intent.putExtra("picture",byteArrayOutputStream.toByteArray());
         startActivity(intent);
 
     }

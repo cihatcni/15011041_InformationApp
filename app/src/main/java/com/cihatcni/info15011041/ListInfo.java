@@ -1,6 +1,8 @@
 package com.cihatcni.info15011041;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,7 +15,14 @@ public class ListInfo extends AppCompatActivity {
 
     String phoneNumber;
     String mailAddress;
-
+    ImageView ppImage;
+    TextView nameInf;
+    TextView surnameInf;
+    TextView emailInf;
+    TextView dateInf;
+    TextView idNumberInf;
+    TextView telNumberInf;
+    TextView ageText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,16 +30,6 @@ public class ListInfo extends AppCompatActivity {
         setContentView(R.layout.activity_list_info);
 
         Intent intent = getIntent();
-
-        ImageView ppImage;
-        TextView nameInf;
-        TextView surnameInf;
-        TextView emailInf;
-        TextView dateInf;
-        TextView idNumberInf;
-        TextView telNumberInf;
-        TextView ageText;
-
         nameInf = findViewById(R.id.nameInfText);
         surnameInf = findViewById(R.id.surnameInfText);
         emailInf = findViewById(R.id.emailInfText);
@@ -48,10 +47,9 @@ public class ListInfo extends AppCompatActivity {
         telNumberInf.setText("Telefon Numarası : " + intent.getStringExtra("telNumber"));
         ageText.setText("(Yaşı : " + intent.getIntExtra("personAge",0) + ")");
 
-        //Bitmap pic = intent.getParcelableExtra("profilePicture");
-        //ppImage.setImageBitmap(pic);
-
-        ppImage.setImageBitmap(MainActivity.myImage);
+        Bitmap pic = BitmapFactory.decodeByteArray(
+                getIntent().getByteArrayExtra("picture"),0,getIntent().getByteArrayExtra("picture").length);
+        ppImage.setImageBitmap(pic);
 
         phoneNumber = intent.getStringExtra("telNumber");
         mailAddress = intent.getStringExtra("email");
