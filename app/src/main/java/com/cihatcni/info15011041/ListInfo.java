@@ -12,6 +12,7 @@ import android.widget.TextView;
 public class ListInfo extends AppCompatActivity {
 
     String phoneNumber;
+    String mailAdress;
 
 
     @Override
@@ -53,6 +54,7 @@ public class ListInfo extends AppCompatActivity {
         ppImage.setImageBitmap(MainActivity.myImage);
 
         phoneNumber = intent.getStringExtra("telNumber");
+        mailAdress = intent.getStringExtra("email");
         System.out.println("YENİDEN OLUŞTURULDU");
 
     }
@@ -82,6 +84,19 @@ public class ListInfo extends AppCompatActivity {
 
         Intent intent = new Intent(this,DersActivity.class);
         startActivity(intent);
+
+    }
+
+    public void sendMail(View view) {
+
+        String[] adresses = new String[1];
+        adresses[0] = mailAdress;
+        Intent mailIntent = new Intent(Intent.ACTION_SENDTO);
+        mailIntent.setData(Uri.parse("mailto:"));
+        mailIntent.putExtra(Intent.EXTRA_EMAIL, adresses);
+
+        if(mailIntent.resolveActivity(getPackageManager()) != null)
+            startActivity(mailIntent);
 
     }
 }
