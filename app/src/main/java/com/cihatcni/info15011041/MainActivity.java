@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -20,6 +22,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Calendar;
 import android.widget.DatePicker;
 import android.widget.Toast;
@@ -36,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
     EditText telNumber;
     Drawable placeholder;
     int personAge;
-    public static Bitmap myImage;
 
 
     @Override
@@ -61,8 +64,8 @@ public class MainActivity extends AppCompatActivity {
             date.setText(savedInstanceState.getString("date"));
             idNumber.setText(savedInstanceState.getString("idNumber"));
             telNumber.setText(savedInstanceState.getString("idNumber"));
-            Bitmap image = savedInstanceState.getParcelable("image");
-            picture.setImageBitmap(image);
+            Bitmap bitmap = savedInstanceState.getParcelable("image");
+            picture.setImageBitmap(bitmap);
         }
 
     }
@@ -93,10 +96,9 @@ public class MainActivity extends AppCompatActivity {
         outState.putString("date",date.getText().toString());
         outState.putString("idNumber",idNumber.getText().toString());
         outState.putString("telNumber",telNumber.getText().toString());
-        picture.setDrawingCacheEnabled(true);
-        picture.buildDrawingCache();
-        Bitmap image= picture.getDrawingCache();
-        outState.putParcelable("image",image);
+        BitmapDrawable drawable = (BitmapDrawable) picture.getDrawable();
+        Bitmap bitmap = drawable.getBitmap();
+        outState.putParcelable("image", bitmap);
         super.onSaveInstanceState(outState);
     }
 
@@ -110,8 +112,8 @@ public class MainActivity extends AppCompatActivity {
         date.setText(savedInstanceState.getString("date"));
         idNumber.setText(savedInstanceState.getString("idNumber"));
         telNumber.setText(savedInstanceState.getString("idNumber"));
-        Bitmap image = savedInstanceState.getParcelable("image");
-        picture.setImageBitmap(image);
+        Bitmap bitmap = savedInstanceState.getParcelable("image");
+        picture.setImageBitmap(bitmap);
     }
 
     public void imageSelect(View view) {
@@ -171,8 +173,18 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == 1 && resultCode == RESULT_OK && data != null) { //Galeri
-            Uri selectedImage = data.getData();
-            picture.setImageURI(selectedImage);
+            final Uri imageUri = data.getData();
+            final InputStream imageStream;
+            try {
+                imageStream = getContentResolver().openInputStream(imageUri);
+                Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                selectedImage = getResizedBitmap(selectedImage,134,134);
+                picture.setImageBitmap(selectedImage);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+
         }
         else if(requestCode == 2 && resultCode == RESULT_OK && data != null) { //Kamera
             Bitmap bitmap = (Bitmap) data.getExtras().get("data");
@@ -256,6 +268,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return age;
+    }
+
+    public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        Matrix matrix = new Matrix();
+        matrix.postScale(scaleWidth, scaleHeight);
+
+        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
+        bm.recycle();
+        return resizedBitmap;
     }
 
 }
