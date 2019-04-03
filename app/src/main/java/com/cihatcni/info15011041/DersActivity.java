@@ -21,15 +21,19 @@ public class DersActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ders);
 
         dersler = new ArrayList<>();
-        Ders ders= new Ders("BBG","AA",120);
+        Ders ders= new Ders("Bilgisayar Bilimlerine Giriş","AA",120);
         dersler.add(ders);
-        ders= new Ders("ALGO","BA",150);
+        ders= new Ders("Algoritma Analizi","BA",150);
         dersler.add(ders);
-        ders= new Ders("PROGRAMLAMAYA GİRİŞ","CB",100);
+        ders= new Ders("Programlamaya Giriş","BB",100);
         dersler.add(ders);
-        ders= new Ders("ASSEMBLY","DC",200);
+        ders= new Ders("Veri Yapıları","DC",200);
         dersler.add(ders);
-        ders= new Ders("DONANIM","DD",160);
+        ders= new Ders("Bilgisayar Donanımı","DD",160);
+        dersler.add(ders);
+        ders= new Ders("Veri İletişimi","CC",220);
+        dersler.add(ders);
+        ders= new Ders("İşletim Sistemleri","BB",195);
         dersler.add(ders);
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
